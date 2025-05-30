@@ -1,3 +1,6 @@
+# Essay Helper
+This project is an attempt to leverage AI for writing in ways that are expansive and not controlling. This project will focus on post-creation help rather than pre-creation help in order to support free-thought, creativity and autonomy while still providing all of the beneficial support AI can offer.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
