@@ -182,7 +182,7 @@ const MobileToolbarContent = ({
   </>
 )
 
-export function SimpleEditor() {
+export function SimpleEditor({ onChange }: { onChange: (content: string) => void }) {
   const isMobile = useMobile()
   const windowSize = useWindowSize()
   const [mobileView, setMobileView] = React.useState<
@@ -211,7 +211,6 @@ export function SimpleEditor() {
       Typography,
       Superscript,
       Subscript,
-
       Selection,
       ImageUploadNode.configure({
         accept: "image/*",
@@ -224,6 +223,24 @@ export function SimpleEditor() {
       Link.configure({ openOnClick: false }),
     ],
     content: content,
+    onSelectionUpdate: ({ editor }) => {
+      const { from, to } = editor.state.selection
+      const selectedText = editor.state.doc.textBetween(from, to, ' ')
+      if (selectedText.trim().length > 0) {
+        onChange(selectedText)
+      } else {
+        const fullText = editor.getText()
+        onChange(fullText)
+      }
+    },
+    onUpdate: ({ editor }) => {
+      // If nothing is selected, fallback to full text
+      const { from, to } = editor.state.selection
+      const selectedText = editor.state.doc.textBetween(from, to, ' ')
+      if (selectedText.trim().length === 0) {
+        onChange(editor.getText())
+      }
+    }
   })
 
   const bodyRect = useCursorVisibility({
