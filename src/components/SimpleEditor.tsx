@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { Dispatch, SetStateAction } from "react"
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
 
 // --- Tiptap Core Extensions ---
@@ -76,6 +77,7 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 import "@/components/tiptap-templates/simple/simple-editor.scss"
 
 import content from "@/components/tiptap-templates/simple/data/content.json"
+import IssuesSideBar from "./IssuesSideBar"
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -181,14 +183,42 @@ const MobileToolbarContent = ({
     )}
   </>
 )
-
-export function SimpleEditor({ onChange }: { onChange: (content: string) => void }) {
+export function SimpleEditor({
+  onChange,
+  onIssues,
+}: {
+  onChange: (content: string) => void;
+  onIssues: Dispatch<SetStateAction<{ issue: string }[]>>;
+}) {
   const isMobile = useMobile()
   const windowSize = useWindowSize()
   const [mobileView, setMobileView] = React.useState<
     "main" | "highlighter" | "link"
   >("main")
   const toolbarRef = React.useRef<HTMLDivElement>(null)
+
+  const handleDialogSubmit = async () => {
+    if (!editor) return;
+  
+    try {
+      const text = editor.getText();
+      console.log("Sending editor content:", text);
+      const res = await fetch("http://localhost:8000/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, question: '', in_text: true }),
+      });
+      const data = await res.json();
+      const parsed = JSON.parse(data.response);
+      console.log("Received response:", parsed.in_text_issues);
+      onIssues(parsed.in_text_issues || []);
+      }
+    catch (error) {
+      console.log("Error fetching chat response:", error);
+    }
+  };
+  
+  const [editorRef, setEditorRef] = React.useState<any>(null);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -266,6 +296,13 @@ export function SimpleEditor({ onChange }: { onChange: (content: string) => void
             : {}
         }
       >
+            <Button
+      className="tiptap-dialog-button"
+      data-style="primary"
+      onClick={handleDialogSubmit}
+    >
+      Analyze Content
+    </Button>
         {mobileView === "main" ? (
           <MainToolbarContent
             onHighlighterClick={() => setMobileView("highlighter")}
@@ -288,5 +325,6 @@ export function SimpleEditor({ onChange }: { onChange: (content: string) => void
         />
       </div>
     </EditorContext.Provider>
+
   )
 }

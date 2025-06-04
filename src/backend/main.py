@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from hugging_face import classify_fallacy
-from llm import ask_question as ask_llm
+from llm import ask_question as ask_llm, in_text_dialogue
 
 
 app = FastAPI()
@@ -18,12 +18,13 @@ app.add_middleware(
 )
 
 class AskRequest(BaseModel):
+    in_text: bool
     text: str
     question: str
 
 @app.post("/api/chat")
 def ask(data: AskRequest):
-    return ask_llm(data)
+    return in_text_dialogue(data) if data.in_text else ask_llm(data)
 
 class FallacyRequest(BaseModel):
     text: str

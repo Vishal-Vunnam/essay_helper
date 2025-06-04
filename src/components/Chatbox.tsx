@@ -18,7 +18,7 @@ export default function Chatbox({ editorContent }: { editorContent: string }) {
       const res = await fetch("http://localhost:8000/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: "", question: full_message }),
+        body: JSON.stringify({ text: "", question: full_message, in_text: false }),
       });
       const data = await res.json();
       console.log(data);
@@ -27,6 +27,23 @@ export default function Chatbox({ editorContent }: { editorContent: string }) {
       console.log("Error fetching chat response:");
     }
   };
+
+  const handleDialogSubmit = async () => {
+    try {
+      console.log("Sending editor content:", editorContent);
+      const res = await fetch("http://localhost:8000/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: editorContent, question:  '', in_text: true }),
+      });
+      const data = await res.json();
+      setResponse(data.response) 
+    } catch (error) {
+      console.log("Error fetching chat response:");
+    };
+  }
+    
+
 
   return (
     <div className="p-3 border rounded bg-light">
@@ -54,6 +71,12 @@ export default function Chatbox({ editorContent }: { editorContent: string }) {
         className="btn btn-primary mb-3"
       >
         Send
+      </button>
+      <button 
+        className="btn btn-secondary mb-3"
+        onClick={handleDialogSubmit}
+      >
+        Send with Dialog
       </button>
       <div className="mt-3 text-dark">
         <strong>Assistant:</strong>

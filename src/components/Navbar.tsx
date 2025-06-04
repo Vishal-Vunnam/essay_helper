@@ -1,8 +1,9 @@
 "use client";
 
-import {AlignJustifyIcon} from "@/components/tiptap-icons/align-justify-icon";
+import React from "react";
+import { AlignJustifyIcon } from "@/components/tiptap-icons/align-justify-icon";
 
-export default function Navbar() {
+export default function Navbar({ isChatboxOpen, toggleChatbox }: { isChatboxOpen: boolean; toggleChatbox: () => void }) {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
@@ -37,6 +38,12 @@ export default function Navbar() {
                 <h1 className="navbar-brand">PenPal.ai</h1>
                 <a>an essay assistant created for writers</a>
                 <div className="collapse navbar-collapse"></div>
+                <button
+                    className="btn btn-primary ms-auto"
+                    onClick={toggleChatbox}
+                >
+                    {isChatboxOpen ? "Close Chatbox" : "Open Chatbox"}
+                </button>
             </div>
         </nav>
     );
