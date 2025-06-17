@@ -16,6 +16,11 @@ def ask_question(data):
     result = response.json()
     return {"response": result.get("response", "No answer")}
 
+def text_response_to_json(text):
+    lines = text.split("\n")
+    lines = [line.strip() for line in lines if line.strip()] 
+    return {"lines": lines}
+
 def in_text_dialogue(data):
     print(data.text)
     prompt = f"""
@@ -25,12 +30,7 @@ def in_text_dialogue(data):
     {data.text}
     That is the end of the essay.
 
-    If there are any logical fallacies, false statements, or argumentative issues, return them in **this exact JSON format**. Please keep only one key per issue.
-
-    {{"in_text_issues": [{{"issue": "Scientific fallacy in sentence: The world is flat. A solution may be to fix sentence to world is round "}},{{"issue": "Bandwagon fallacy in sentence: Everyone believes in astrology."}}]}}
-
-    if there are no issues, return an empty JSON object like this:
-    {{}}
+    If there are any logical fallacies, false statements, or argumentative issues, return them with each issue on a new line. 
     """
     print(prompt)
 
@@ -43,7 +43,9 @@ def in_text_dialogue(data):
         }
     )
 
-    result = response.json()
-    print(result.get("response", "No answer"))
-    return {"response": result.get("response", "No answer")}
+    # print(response.text.response)
 
+    result = response.json()
+    parsed_response = text_response_to_json(result.get("response", "No answer"))
+    print(parsed_response)
+    return {"response": parsed_response}

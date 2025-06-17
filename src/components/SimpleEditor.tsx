@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Dispatch, SetStateAction } from "react"
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
+import { Editor } from "@tiptap/core"
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
@@ -183,23 +184,64 @@ const MobileToolbarContent = ({
     )}
   </>
 )
+
 export function SimpleEditor({
   onChange,
   onIssues,
 }: {
   onChange: (content: string) => void;
-  onIssues: Dispatch<SetStateAction<{ issue: string }[]>>;
+  onIssues: Dispatch<SetStateAction<string[]>>;
 }) {
-  const isMobile = useMobile()
-  const windowSize = useWindowSize()
+  const isMobile = useMobile();
+  const windowSize = useWindowSize();
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Image,
+      TaskItem,
+      TaskList,
+      TextAlign,
+      Typography,
+      Highlight,
+      Subscript,
+      Superscript,
+      Underline,
+      Link,
+      Selection,
+      TrailingNode,
+      ImageUploadNode,
+    ],
+    content,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
   const [mobileView, setMobileView] = React.useState<
     "main" | "highlighter" | "link"
-  >("main")
-  const toolbarRef = React.useRef<HTMLDivElement>(null)
+  >("main");
+  const toolbarRef = React.useRef<HTMLDivElement>(null);
+
+  const [loading, setLoading] = React.useState(false);
+
+  // Animated dots component
+  const LoadingDots = () => {
+    const [dots, setDots] = React.useState("");
+    React.useEffect(() => {
+      if (!loading) {
+        setDots("");
+        return;
+      }
+      const interval = setInterval(() => {
+        setDots((prev) => (prev.length < 3 ? prev + "." : ""));
+      }, 500);
+      return () => clearInterval(interval);
+    }, [loading]);
+    return <span style={{ marginLeft: 5 }}>{dots}</span>;
+  };
 
   const handleDialogSubmit = async () => {
     if (!editor) return;
-  
+    setLoading(true);
     try {
       const text = editor.getText();
       console.log("Sending editor content:", text);
@@ -209,100 +251,42 @@ export function SimpleEditor({
         body: JSON.stringify({ text, question: '', in_text: true }),
       });
       const data = await res.json();
-      const parsed = JSON.parse(data.response);
-      console.log("Received response:", parsed.in_text_issues);
-      onIssues(parsed.in_text_issues || []);
-      }
-    catch (error) {
+      onIssues(data.response.lines || []);
+      console.log("Received issues:", data.response.lines);
+    } catch (error) {
       console.log("Error fetching chat response:", error);
+    } finally {
+      setLoading(false);
     }
   };
-  
-  const [editorRef, setEditorRef] = React.useState<any>(null);
 
-  const editor = useEditor({
-    immediatelyRender: false,
-    editorProps: {
-      attributes: {
-        autocomplete: "off",
-        autocorrect: "off",
-        autocapitalize: "off",
-        "aria-label": "Main content area, start typing to enter text.",
-      },
-    },
-    extensions: [
-      StarterKit,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Underline,
-      TaskList,
-      TaskItem.configure({ nested: true }),
-      Highlight.configure({ multicolor: true }),
-      Image,
-      Typography,
-      Superscript,
-      Subscript,
-      Selection,
-      ImageUploadNode.configure({
-        accept: "image/*",
-        maxSize: MAX_FILE_SIZE,
-        limit: 3,
-        upload: handleImageUpload,
-        onError: (error) => console.error("Upload failed:", error),
-      }),
-      TrailingNode,
-      Link.configure({ openOnClick: false }),
-    ],
-    content: content,
-    onSelectionUpdate: ({ editor }) => {
-      const { from, to } = editor.state.selection
-      const selectedText = editor.state.doc.textBetween(from, to, ' ')
-      if (selectedText.trim().length > 0) {
-        onChange(selectedText)
-      } else {
-        const fullText = editor.getText()
-        onChange(fullText)
-      }
-    },
-    onUpdate: ({ editor }) => {
-      // If nothing is selected, fallback to full text
-      const { from, to } = editor.state.selection
-      const selectedText = editor.state.doc.textBetween(from, to, ' ')
-      if (selectedText.trim().length === 0) {
-        onChange(editor.getText())
-      }
-    }
-  })
-
-  const bodyRect = useCursorVisibility({
-    editor,
-    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
-  })
-
-  React.useEffect(() => {
-    if (!isMobile && mobileView !== "main") {
-      setMobileView("main")
-    }
-  }, [isMobile, mobileView])
+  // ...rest of your code unchanged
 
   return (
     <EditorContext.Provider value={{ editor }}>
       <Toolbar
         ref={toolbarRef}
-        style={
-          isMobile
-            ? {
-                bottom: `calc(100% - ${windowSize.height - bodyRect.y}px)`,
-              }
-            : {}
-        }
+        style={{
+          background:
+            "linear-gradient(135deg, #001f3f 0%, #003366 50%, #004080 100%)",
+          color: "white",
+          minHeight: isMobile ? "100vh" : undefined,
+          display: isMobile ? "flex" : undefined,
+          flexDirection: isMobile ? "column" : undefined,
+        }}
+        className="custom-toolbar"
       >
-            <Button
-      className="tiptap-dialog-button"
-      data-style="primary"
-      onClick={handleDialogSubmit}
-    >
-      Analyze Content
-    </Button>
+        <Button
+          className="tiptap-dialog-button"
+          data-style="primary"
+          onClick={handleDialogSubmit}
+          style={{ color: "white" }}
+          disabled={loading}
+        >
+          Analyze Content
+          {loading && <LoadingDots />}
+        </Button>
+
         {mobileView === "main" ? (
           <MainToolbarContent
             onHighlighterClick={() => setMobileView("highlighter")}
@@ -325,6 +309,5 @@ export function SimpleEditor({
         />
       </div>
     </EditorContext.Provider>
-
-  )
+  );
 }

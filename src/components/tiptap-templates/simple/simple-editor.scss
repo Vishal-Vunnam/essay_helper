@@ -78,3 +78,16 @@ body {
     padding: 1rem 1.5rem;
   }
 }
+.custom-toolbar {
+  color: white;
+}
+
+.custom-toolbar button,
+.custom-toolbar [role="button"] {
+  color: white !important;
+  fill: white !important;
+}
+
+.custom-toolbar svg {
+  fill: white !important;
+}

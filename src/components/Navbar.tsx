@@ -1,49 +1,61 @@
 "use client";
 
 import React from "react";
-import { AlignJustifyIcon } from "@/components/tiptap-icons/align-justify-icon";
 
 export default function Navbar({ isChatboxOpen, toggleChatbox }: { isChatboxOpen: boolean; toggleChatbox: () => void }) {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container-fluid">
-                <div className="dropdown me-auto">
-                    <button
-                        className="btn btn-clear dropdown-toggle border-0 shadow-none"
-                        type="button"
-                        id="dropdownMenuButton"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
+        <nav
+          className="navbar navbar-expand-lg"
+          style={{ backgroundColor: '#001f3f', padding: '0.8rem 1.5rem' }}
+        >
+            <div className="container-fluid d-flex align-items-center">
+                {/* Header and subtitle aligned left */}
+                <div className="d-flex align-items-center">
+                    <h1
+                      className="navbar-brand m-0"
+                      style={{ 
+                        fontFamily: "'Playfair Display', serif",
+                        fontWeight: '700',
+                        fontSize: '2.2rem',
+                        color: 'white',
+                        userSelect: 'none',
+                        letterSpacing: '0.1em',
+                      }}
                     >
-                        <AlignJustifyIcon className="tiptap-button-icon" />
-                    </button>
-                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li>
-                            <a className="dropdown-item" href="#">
-                                Action
-                            </a>
-                        </li>
-                        <li>
-                            <a className="dropdown-item" href="#">
-                                Another action
-                            </a>
-                        </li>
-                        <li>
-                            <a className="dropdown-item" href="#">
-                                Something else here
-                            </a>
-                        </li>
-                    </ul>
+                        PenPal.ai
+                    </h1>
+
+                    <span
+                      className="ms-3 d-none d-lg-block"
+                      style={{
+                        fontFamily: "'Playfair Display', serif",
+                        fontStyle: 'italic',
+                        color: '#c0c9d9',
+                        fontSize: '1rem',
+                        userSelect: 'none',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                        an essay assistant created for writers
+                    </span>
                 </div>
-                <h1 className="navbar-brand">PenPal.ai</h1>
-                <a>an essay assistant created for writers</a>
-                <div className="collapse navbar-collapse"></div>
-                <button
-                    className="btn btn-primary ms-auto"
-                    onClick={toggleChatbox}
-                >
-                    {isChatboxOpen ? "Close Chatbox" : "Open Chatbox"}
-                </button>
+
+                {/* Spacer to push button right */}
+                <div className="ms-auto">
+                    <button
+                        className="btn btn-outline-light"
+                        onClick={toggleChatbox}
+                        style={{
+                          fontFamily: "'Playfair Display', serif",
+                          fontWeight: '600',
+                          fontSize: '1rem',
+                          padding: '0.35rem 1rem',
+                          borderRadius: '0.3rem',
+                        }}
+                    >
+                        {isChatboxOpen ? "Close Chatbox" : "Open Chatbox"}
+                    </button>
+                </div>
             </div>
         </nav>
     );
