@@ -1,13 +1,37 @@
 # Essay Helper
-This project is an attempt to leverage AI for writing in ways that are expansive and not controlling. This project will focus on post-creation help rather than pre-creation help in order to support free-thought, creativity and autonomy while still providing all of the beneficial support AI can offer.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**Essay Helper** is a writing assistant that aims to enhance creativity without controlling it. This tool focuses on **post-creation analysis** rather than pre-creation assistance. It allows you to express your thoughts freely and receive constructive feedback afterward.
+
+The goal is to support **free thought, clarity, and autonomy**, while still offering the benefits of AI—such as logic checking, sentence-level issue highlighting, and helpful suggestions.
+
+---
+
+## Features
+
+- Rich-text editor with intuitive formatting
+- AI-powered issue detection (e.g., logical fallacies, vague reasoning)
+- Sentence-level highlighting of flagged issues
+- Sidebar explanation of detected problems
+- Local LLM using [Ollama](https://ollama.com)
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the Repository
 
 ```bash
+git clone https://github.com/your-username/essay-helper.git
+cd essay-helper
+
+#INSTALL DEPENDENCIES 
+npm install
+# or
+yarn
+# or
+pnpm install
+
+#START DEVELOPMENT SERVER
 npm run dev
 # or
 yarn dev
@@ -15,25 +39,34 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The app will run at http://localhost:3000.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+##Local LLM Setup with Ollama
+This project uses Ollama to run a local language model.
 
-## Learn More
+##Install and Run Mistral
+Install Ollama: https://ollama.com/download
 
-To learn more about Next.js, take a look at the following resources:
+##Run the following command:
+ollama run mistral
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#FUTURE GOALS
+Detect stylistic issues (e.g., passive voice, redundancy)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Add citation and source-checking support
 
-## Deploy on Vercel
+Customize feedback based on writing goals (persuasive, narrative, academic)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Enable export to formats like PDF or Google Docs with margin comments
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#Philosophy
+This tool is designed to support reflection, not restriction. AI is used here to enhance thought, not replace it. Essay Helper encourages critical thinking and revision without compromising the writer’s voice.
+
+##Contributors
+Vishal Vunnam
+
+##License
+MIT License — free to use and modify. Contributions are welcome.
+Let me know if you want to add a usage GIF, contribution guide, or environment variables section.

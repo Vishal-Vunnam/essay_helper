@@ -49,7 +49,7 @@ export default function IssuesSideBar({
                 key={index}
                 className="bg-white text-black rounded p-3 mb-3 d-flex justify-content-between align-items-center"
               >
-                <span className="flex-grow-1 me-3">{item}</span>
+                <span className="flex-grow-1 me-3" style={{ fontSize: '0.875rem' }}><i>{item}</i></span>
                 <button
                   className="btn btn-sm btn-outline-dark rounded-circle d-flex align-items-center justify-content-center"
                   style={{
