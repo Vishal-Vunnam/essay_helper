@@ -6,6 +6,10 @@ The goal is to support **free thought, clarity, and autonomy**, while still offe
 
 ---
 
+![alt text](https://github.com/Vishal-Vunnam/essay_helper/blob/master/src/img/Screenshot%202025-06-18%20at%2011.37.20%E2%80%AFAM.png)
+
+![alt text](https://github.com/Vishal-Vunnam/essay_helper/blob/master/src/img/Screenshot%202025-06-18%20at%2011.47.37%E2%80%AFAM.png)
+
 ## Features
 
 - Rich-text editor with intuitive formatting
