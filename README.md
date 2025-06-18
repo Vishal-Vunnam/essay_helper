@@ -2,7 +2,7 @@
 
 **Essay Helper** is a writing assistant that aims to enhance creativity without controlling it. This tool focuses on **post-creation analysis** rather than pre-creation assistance. It allows you to express your thoughts freely and receive constructive feedback afterward.
 
-The goal is to support **free thought, clarity, and autonomy**, while still offering the benefits of AI—such as logic checking, sentence-level issue highlighting, and helpful suggestions.
+The goal is to support **free thought, clarity, and autonomy**, while still offering the benefits of AI, such as logic checking, fallacy detection, and helpful suggestions.
 
 ---
 
